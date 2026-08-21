@@ -21,6 +21,9 @@
     "sanity": "^6.10.1",
     "styled-components": "^6.1.18"
   },
+  "overrides": {
+    "@sanity/sdk-react": "2.19.0"
+  },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^7",
     "@types/react": "^19.2.14",

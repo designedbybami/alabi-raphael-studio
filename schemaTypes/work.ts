@@ -98,7 +98,7 @@ export const work = defineType({
       name: "featured",
       type: "boolean",
       title: "Featured on homepage",
-      initialValue: false,
+      initialValue: true,
     }),
   ],
   preview: {

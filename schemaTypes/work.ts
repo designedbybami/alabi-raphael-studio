@@ -33,6 +33,19 @@ export const work = defineType({
       ],
     }),
     defineField({
+      name: "type",
+      type: "string",
+      description: "Which section of the site this belongs to — used to sort it into the right page",
+      options: {
+        list: [
+          { title: "Artwork", value: "artwork" },
+          { title: "Brand Design", value: "brandDesign" },
+        ],
+        layout: "radio",
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: "category",
       type: "reference",
       to: [{ type: "category" }],

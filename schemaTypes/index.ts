@@ -1,4 +1,3 @@
-import { artwork } from "./artwork";
-import { brandDesign } from "./brandDesign";
+import { work } from "./work";
 
-export const schemaTypes = [artwork, brandDesign];
+export const schemaTypes = [work];

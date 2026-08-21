@@ -1,11 +1,11 @@
 import { defineField, defineType } from "sanity";
-import { CaseIcon } from "@sanity/icons/Case";
+import { ImageIcon } from "@sanity/icons/Image";
 
-export const brandDesign = defineType({
-  name: "brandDesign",
-  title: "Brand Design",
+export const work = defineType({
+  name: "work",
+  title: "Work",
   type: "document",
-  icon: CaseIcon,
+  icon: ImageIcon,
   fields: [
     defineField({
       name: "title",
@@ -19,16 +19,7 @@ export const brandDesign = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "client",
-      type: "string",
-    }),
-    defineField({
-      name: "year",
-      type: "number",
-      validation: (rule) => rule.integer().min(1900).max(2100),
-    }),
-    defineField({
-      name: "coverImage",
+      name: "image",
       type: "image",
       options: { hotspot: true },
       validation: (rule) => rule.required(),
@@ -40,6 +31,36 @@ export const brandDesign = defineType({
           validation: (rule) => rule.required().warning("Alt text is important for accessibility and SEO"),
         }),
       ],
+    }),
+    defineField({
+      name: "category",
+      type: "string",
+      description: "e.g. Portrait, Scene, Pattern, Branding — describe the type of work in your own words",
+    }),
+    defineField({
+      name: "client",
+      type: "string",
+      description: "If this piece was commissioned, name the client here",
+    }),
+    defineField({
+      name: "year",
+      type: "number",
+      validation: (rule) => rule.integer().min(1900).max(2100),
+    }),
+    defineField({
+      name: "shortDescription",
+      title: "Short description",
+      type: "text",
+      rows: 2,
+      description: "A brief line shown alongside the work in listings",
+      validation: (rule) => rule.max(160).warning("Keep this short — it's meant for previews, not the full story"),
+    }),
+    defineField({
+      name: "about",
+      title: "About this work",
+      type: "text",
+      rows: 6,
+      description: "The longer story behind the piece, shown on its own page",
     }),
     defineField({
       name: "gallery",
@@ -60,17 +81,6 @@ export const brandDesign = defineType({
       ],
     }),
     defineField({
-      name: "description",
-      type: "text",
-      rows: 4,
-    }),
-    defineField({
-      name: "tags",
-      type: "array",
-      of: [{ type: "string" }],
-      options: { layout: "tags" },
-    }),
-    defineField({
       name: "featured",
       type: "boolean",
       title: "Featured on homepage",
@@ -78,6 +88,6 @@ export const brandDesign = defineType({
     }),
   ],
   preview: {
-    select: { title: "title", media: "coverImage", subtitle: "client" },
+    select: { title: "title", media: "image", subtitle: "category" },
   },
 });

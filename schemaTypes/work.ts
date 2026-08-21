@@ -34,8 +34,9 @@ export const work = defineType({
     }),
     defineField({
       name: "category",
-      type: "string",
-      description: "e.g. Portrait, Scene, Pattern, Branding — describe the type of work in your own words",
+      type: "reference",
+      to: [{ type: "category" }],
+      description: "Pick an existing category, or create a new one from this field if it's not listed yet",
     }),
     defineField({
       name: "client",
@@ -88,6 +89,6 @@ export const work = defineType({
     }),
   ],
   preview: {
-    select: { title: "title", media: "image", subtitle: "category" },
+    select: { title: "title", media: "image", subtitle: "category.title" },
   },
 });

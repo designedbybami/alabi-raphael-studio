@@ -1,11 +1,34 @@
 import { defineField, defineType } from "sanity";
 import { ImageIcon } from "@sanity/icons/Image";
 
+// The site only ever displays the newest 16 of each type (see
+// MAX_CAROUSEL_ITEMS in the Next app) — older ones just roll off, nothing
+// breaks past 16. This is only a nudge so an editor notices before wondering
+// why an older piece stopped showing; it never blocks publishing.
+const MAX_PUBLISHED_PER_TYPE = 16;
+
 export const work = defineType({
   name: "work",
   title: "Work",
   type: "document",
   icon: ImageIcon,
+  validation: (Rule) =>
+    Rule.custom(async (doc, context) => {
+      const type = (doc as { type?: string } | undefined)?.type;
+      if (!type) return true;
+
+      const client = context.getClient({ apiVersion: "2026-08-22" });
+      const publishedId = doc!._id.replace(/^drafts\./, "");
+      const count = await client.fetch<number>(
+        `count(*[_type == "work" && type == $type && !(_id in path("drafts.**")) && _id != $publishedId])`,
+        { type, publishedId },
+      );
+
+      if (count >= MAX_PUBLISHED_PER_TYPE) {
+        return `There are already ${count} published items of this type — the site only shows the newest ${MAX_PUBLISHED_PER_TYPE}, so this or an older one won't display. Not blocking, just a heads-up.`;
+      }
+      return true;
+    }).warning(),
   fields: [
     defineField({
       name: "title",

@@ -5,7 +5,7 @@ export default defineCliConfig({
     projectId: 'amqkfghc',
     dataset: 'production'
   },
-  studioHost: 'raphalabi',
+  studioHost: 'https://studio.alabiraphael.com',
   deployment: {
     /**
      * Enable auto-updates for studios.

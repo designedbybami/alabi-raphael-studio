@@ -1,10 +1,8 @@
 import { defineField, defineType } from "sanity";
 import { ImageIcon } from "@sanity/icons/Image";
 
-// The site only ever displays the newest 16 of each type (see
-// MAX_CAROUSEL_ITEMS in the Next app) — older ones just roll off, nothing
-// breaks past 16. This is only a nudge so an editor notices before wondering
-// why an older piece stopped showing; it never blocks publishing.
+// A nudge only, never blocking: the site shows the newest 16 of each type
+// (MAX_CAROUSEL_ITEMS in the Next app), so older ones silently stop showing.
 const MAX_PUBLISHED_PER_TYPE = 16;
 
 export const work = defineType({
@@ -25,7 +23,7 @@ export const work = defineType({
       );
 
       if (count >= MAX_PUBLISHED_PER_TYPE) {
-        return `There are already ${count} published items of this type — the site only shows the newest ${MAX_PUBLISHED_PER_TYPE}, so this or an older one won't display. Not blocking, just a heads-up.`;
+        return `There are already ${count} published items of this type. The site only shows the newest ${MAX_PUBLISHED_PER_TYPE}, so this or an older one will not display. Not blocking, just a heads-up.`;
       }
       return true;
     }).warning(),
@@ -58,7 +56,7 @@ export const work = defineType({
     defineField({
       name: "type",
       type: "string",
-      description: "Which section of the site this belongs to — used to sort it into the right page",
+      description: "Which section of the site this belongs to, used to sort it into the right page",
       options: {
         list: [
           { title: "Artwork", value: "artwork" },
@@ -90,7 +88,7 @@ export const work = defineType({
       type: "text",
       rows: 2,
       description: "A brief line shown alongside the work in listings",
-      validation: (rule) => rule.max(160).warning("Keep this short — it's meant for previews, not the full story"),
+      validation: (rule) => rule.max(160).warning("Keep this short, it's meant for previews, not the full story"),
     }),
     defineField({
       name: "about",
@@ -125,6 +123,10 @@ export const work = defineType({
     }),
   ],
   preview: {
-    select: { title: "title", media: "image", subtitle: "category.title" },
+    select: { title: "title", media: "image", type: "type" },
+    prepare({ title, media, type }) {
+      const TYPE_LABELS: Record<string, string> = { artwork: "Artwork", brandDesign: "Brand Design" };
+      return { title, media, subtitle: TYPE_LABELS[type] ?? type };
+    },
   },
 });
